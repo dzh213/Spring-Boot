@@ -25,7 +25,7 @@ public class UserController {
 
     @ApiOperation(value = "根据id查看学生信息")
     @RequestMapping(value = "getUserById",method = RequestMethod.GET)
-    public BaseResult getUserById(@ApiParam(value = "学生id",required = true) @RequestParam(value = "userId",required = true) int userId) {
+    public BaseResult<UserRequest> getUserById(@ApiParam(value = "学生id",required = true) @RequestParam(value = "userId",required = true) int userId) {
         Student student = studentMapper.selectByPrimaryKey(userId);
         BaseResult baseResult = new BaseResult();
         if (student == null) {
@@ -33,9 +33,13 @@ public class UserController {
             baseResult.setMessage("学生不存在");
             return baseResult;
         }
+        UserRequest userRequest = new UserRequest();
+        userRequest.setName(student.getName());
+        userRequest.setAge(student.getAge());
+        userRequest.setClassId(student.getClassId());
         baseResult.setCode(1);
         baseResult.setMessage("查询成功");
-        baseResult.setData(student);
+        baseResult.setData(userRequest);
         return baseResult;
     }
 
